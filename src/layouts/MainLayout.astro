@@ -1,0 +1,85 @@
+---
+import Header from "@components/layout/Header";
+import Footer from "@components/layout/Footer";
+import { AuthProvider } from "@context/AuthContext";
+import { CartProvider } from "@context/CartContext";
+import "../styles/global.css";
+
+// SEO Props
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = "ShopAstro - Your Modern Ecommerce Store",
+  description = "Find the best products at the best prices at ShopAstro.",
+  image = "/images/og-image.jpg",
+} = Astro.props;
+
+// Generate canonical URL
+let canonicalURL;
+try {
+  canonicalURL = new URL(Astro.url.pathname, Astro.site || 'http://localhost:4321');
+} catch (error) {
+  // Fallback to just using the pathname
+  canonicalURL = new URL('http://localhost:4321' + Astro.url.pathname);
+}
+
+// Process image URLs
+let ogImageUrl = image;
+let twitterImageUrl = image;
+try {
+  if (image.startsWith('/')) {
+    ogImageUrl = new URL(image, canonicalURL).toString();
+    twitterImageUrl = ogImageUrl;
+  }
+} catch (error) {
+  // Fallback to just using the image path directly
+  console.error('Error processing image URL:', error);
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL.toString()} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL.toString()} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL.toString()} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={twitterImageUrl} />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class="flex flex-col min-h-screen bg-gray-50">
+    <AuthProvider client:load>
+      <CartProvider client:load>
+        <Header client:load />
+        
+        <main class="flex-grow">
+          <slot />
+        </main>
+        
+        <Footer client:visible />
+      </CartProvider>
+    </AuthProvider>
+  </body>
+</html>
