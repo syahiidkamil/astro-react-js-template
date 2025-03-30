@@ -10,17 +10,4 @@ import * as path from "path";
 // https://astro.build/config
 export default defineConfig({
   integrations: [react()],
-  vite: {
-    css: {
-      postcss: {
-        plugins: [
-          tailwindcssNesting(),
-          tailwindcss({
-            config: path.resolve(import.meta.dirname, "tailwind.config.js"),
-          }),
-          autoprefixer(),
-        ],
-      },
-    },
-  },
 });

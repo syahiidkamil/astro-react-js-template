@@ -2,13 +2,15 @@
 import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
 import App from '../components/App.jsx';
-import "../styles/global.css";
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import TailwindTest from '../components/TailwindTest.astro';
+// No need to import global.css here as it's already in the Layout
 ---
 
 <Layout>
-<App></App>
-	<Welcome />
+    <div class="p-4 bg-gray-100">
+        <h1 class="text-2xl font-bold text-center mb-4">Testing Tailwind in Astro</h1>
+        <TailwindTest />
+        <App />
+        <Welcome />
+    </div>
 </Layout>
