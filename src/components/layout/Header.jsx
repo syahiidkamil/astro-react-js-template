@@ -72,6 +72,7 @@ export default function Header() {
                 href="/cart"
                 className="group flex items-center p-2 -m-2"
                 aria-label="Shopping cart"
+                transition:name="cart-icon"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

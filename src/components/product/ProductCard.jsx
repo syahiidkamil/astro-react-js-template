@@ -22,7 +22,7 @@ export default function ProductCard({ product }) {
 
   return (
     <div className="group relative rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md">
-      <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-t-lg bg-gray-200">
+      <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-t-lg bg-gray-200" transition:name={`product-image-${product.id}`}>
         {product.image ? (
           <img
             src={product.image}
@@ -37,7 +37,7 @@ export default function ProductCard({ product }) {
       </div>
       
       <div className="p-4">
-        <h3 className="text-lg font-medium text-gray-900">
+        <h3 className="text-lg font-medium text-gray-900" transition:name={`product-title-${product.id}`}>
           <a href={`/products/${product.id}`}>
             {product.name}
           </a>
@@ -57,6 +57,7 @@ export default function ProductCard({ product }) {
             size="sm" 
             onClick={handleAddToCart}
             disabled={!isClient} // Disable button server-side or when context is not available
+            className="transition-all duration-300"
           >
             Add to Cart
           </Button>
