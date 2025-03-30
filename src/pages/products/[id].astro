@@ -4,29 +4,30 @@ import Button from "@components/ui/Button";
 import AddToCartForm from "@components/product/AddToCartForm";
 import { productApi } from "@api/products";
 
-// Get the product ID from the URL
-const { id } = Astro.params;
+// Define the static paths for all products
+export async function getStaticPaths() {
+  // Fetch all products
+  const products = await productApi.getAllProducts();
+  
+  // Return the paths for each product
+  return products.map(product => ({
+    params: { id: product.id },
+    props: { product },
+  }));
+}
 
-// Fetch the product data
-let product;
+// Get the product from props
+const { product } = Astro.props;
+
+// Fetch related products
 let relatedProducts = [];
 try {
-  product = await productApi.getProductById(id);
-  if (!product) {
-    return Astro.redirect("/404");
-  }
-  
-  // For demo purposes, let's define some related products
-  // In a real app, you would fetch these from the API
-  try {
-    relatedProducts = await productApi.getAllProducts({ limit: 4 });
-  } catch (error) {
-    console.error('Failed to fetch related products:', error);
-    // Continue with empty related products
-  }
+  relatedProducts = await productApi.getAllProducts({ limit: 4 });
+  // Optionally filter out the current product from related products
+  relatedProducts = relatedProducts.filter(p => p.id !== product.id);
 } catch (error) {
-  console.error('Failed to fetch product:', error);
-  return Astro.redirect("/404");
+  console.error('Failed to fetch related products:', error);
+  // Continue with empty related products
 }
 ---
 

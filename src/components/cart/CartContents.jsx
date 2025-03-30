@@ -4,8 +4,10 @@ import CartItem from './CartItem';
 import Button from '@components/ui/Button';
 
 export default function CartContents() {
-  const { items, total, itemCount, loading } = useCart();
+  // Safely use the cart hook - it will now provide fallback values during SSR
+  const { items = [], total = 0, itemCount = 0, loading = true } = useCart();
 
+  // Safely handle the loading state
   if (loading) {
     return (
       <div className="flex flex-col">
